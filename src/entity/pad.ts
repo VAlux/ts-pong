@@ -35,6 +35,7 @@ export class Pad extends PhysicalEntity implements Drawable, Actor {
       // TODO: maybe add field bouncing suppressor factor??
       if (direction === CollisionDirection.UP || direction === CollisionDirection.DOWN) {
         this.velocityY *= -1;
+        this.posY += Math.sign(this.velocityY);
       }
     }
   }

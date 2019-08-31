@@ -12,8 +12,6 @@ export class CollisionResolver {
 
   constructor(private readonly entities: PhysicalEntity[]) { }
 
-
-
   public resolveCollisions(): void {
     for(let i = 0; i < this.entities.length; i++) {
       const subject = this.entities[i];

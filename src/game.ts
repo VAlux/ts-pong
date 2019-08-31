@@ -8,11 +8,16 @@ import {TypedEventEmitter} from "./typed-event-kit";
 import {PlayerPad} from "./entity/player-pad";
 import {EnemyPad} from "./entity/enemy-pad";
 
+enum PadAlignment {
+  LEFT,
+  RIGHT
+}
+
 export class Game {
   private actors: Actor[];
   private isRunning: boolean;
   private readonly canvas: HTMLCanvasElement;
-  private readonly playerPad: PlayerPad;
+  private readonly playerPad: PlayerPad = new PlayerPad(0,0,0,0);
   private readonly enemyPad: EnemyPad;
   private readonly field: Field;
   private readonly ball: Ball;
@@ -33,10 +38,10 @@ export class Game {
     this.ball = new Ball(width / 2, height / 2, aspectRatio * 10, aspectRatio * 10, this.scoreEventListener);
     this.playerPad = this.createPlayerPad(width, height);
     this.enemyPad = this.createEnemyPad(width, height);
-    this.field = this.createField(width, height);
+    this.field =  new Field(0, 0, width, height);
+    this.actors = [this.playerPad, this.enemyPad, this.ball];
 
-    this.actors = new Array<Actor>(this.playerPad, this.enemyPad, this.ball);
-    const gameEntities = Array(this.playerPad, this.enemyPad, this.field, this.ball);
+    const gameEntities = [this.playerPad, this.enemyPad, this.field, this.ball];
     this.renderer = new Renderer(this.canvas, gameEntities);
     this.collisionResolver = new CollisionResolver(gameEntities);
     this.inputEventListener = new InputEventListener();
@@ -63,10 +68,10 @@ export class Game {
     this.inputEventListener.eventEmitter.on((action) => {
       switch (action) {
         case MoveActionEvent.MOVE_UP:
-          this.playerPad.moveTo(0, 2);
+          this.playerPad.moveTo(0, 4);
           break;
         case MoveActionEvent.MOVE_DOWN:
-          this.playerPad.moveTo(0, -2);
+          this.playerPad.moveTo(0, -4);
           break;
       }
     });
@@ -90,15 +95,8 @@ export class Game {
     }
   }
 
-  private createField(width: number, height: number): Field {
-    return new Field(0, 0, width, height);
-  }
-
-  private createPlayerPad(width: number, height: number): PlayerPad {
-    const padWidth = width / 60;
-    const padHeight = height / 5;
-    const padPositionX = width - (width - padWidth);
-    const padPositionY = height - (height / 2 + padHeight);
+  private createPlayerPad(width: number, height: number, align: PadAlignment = PadAlignment.LEFT): PlayerPad {
+    const {padWidth, padHeight, padPositionX, padPositionY} = Game.calculatePadPosition(width, height, align);
 
     return new PlayerPad(
       padPositionX,
@@ -107,11 +105,8 @@ export class Game {
       padHeight);
   }
 
-  private createEnemyPad(width: number, height: number): EnemyPad {
-    const padWidth = width / 60;
-    const padHeight = height / 5;
-    const padPositionX = width - padWidth;
-    const padPositionY = height - (height / 2 + padHeight);
+  private createEnemyPad(width: number, height: number, align: PadAlignment = PadAlignment.RIGHT): EnemyPad {
+    const {padWidth, padHeight, padPositionX, padPositionY} = Game.calculatePadPosition(width, height, align);
 
     return new EnemyPad(
       padPositionX,
@@ -119,6 +114,24 @@ export class Game {
       padWidth,
       padHeight,
       this.ball);
+  }
+
+  private static calculatePadPosition(canvasWidth: number, canvasHeight: number, align: PadAlignment) {
+    const padWidth = canvasWidth / 60;
+    const padHeight = canvasHeight / 5;
+
+    switch (align) {
+      case PadAlignment.LEFT: {
+        const padPositionX = canvasWidth - (canvasWidth - padWidth);
+        const padPositionY = canvasHeight - (canvasHeight / 2 + padHeight);
+        return {padWidth, padHeight, padPositionX, padPositionY};
+      }
+      case PadAlignment.RIGHT: {
+        const padPositionX = canvasWidth - (padWidth * 2);
+        const padPositionY = canvasHeight - (canvasHeight / 2 + padHeight);
+        return {padWidth, padHeight, padPositionX, padPositionY};
+      }
+    }
   }
 }
 

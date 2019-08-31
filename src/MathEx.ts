@@ -8,4 +8,8 @@ export class MathEx {
     const y = +value + (precision === undefined ? 0.5 : precision / 2);
     return y - (y % (precision === undefined ? 1 : +precision));
   }
+
+  static random(min: number, max: number) {
+    return Math.random() * (max - min) + min;
+  }
 }

@@ -5,6 +5,7 @@ import {Actor} from "../actor";
 import {CollisionDirection} from "../collision-resolver";
 import {ScoreActionEvent} from "../game-event";
 import {TypedEventEmitter} from "../typed-event-kit";
+import {MathEx} from "../MathEx";
 
 export class Ball extends PhysicalEntity implements Drawable, Actor {
 
@@ -18,8 +19,8 @@ export class Ball extends PhysicalEntity implements Drawable, Actor {
 
     super(posX, posY, width, height);
 
-    this.velocityX = Math.random() * 10;
-    this.velocityY = Math.random() * 10;
+    this.velocityX = MathEx.random(-10, 10);
+    this.velocityY = MathEx.random(-10, 10);
     this.scoreEventEmitter = scoreEmitter;
   }
 
@@ -38,7 +39,7 @@ export class Ball extends PhysicalEntity implements Drawable, Actor {
 
   checkCollisionWith(target: PhysicalEntity): CollisionDirection {
     if (target instanceof Field) {
-      if (this.x < target.x) {
+      if (this.x - this.width < target.x) {
         this.scoreEventEmitter.emit(ScoreActionEvent.RIGHT_PLAYER_SCORED);
         return CollisionDirection.LEFT;
       }
@@ -48,7 +49,7 @@ export class Ball extends PhysicalEntity implements Drawable, Actor {
         return CollisionDirection.RIGHT;
       }
 
-      if (this.y < target.y) {
+      if (this.y - this.height < target.y) {
         return CollisionDirection.UP;
       }
 
@@ -58,6 +59,7 @@ export class Ball extends PhysicalEntity implements Drawable, Actor {
 
       return CollisionDirection.NO_COLLISION;
     } else {
+      // we do not care about the up and down collisions in this case
       if (this.x > target.x + target.w &&
         this.x - this.w < target.x + target.w &&
         this.y > target.y &&
@@ -65,25 +67,11 @@ export class Ball extends PhysicalEntity implements Drawable, Actor {
         return CollisionDirection.LEFT;
       }
 
-      if (this.x < target.x - target.w &&
-        this.x + this.w > target.x - target.w &&
+      if (this.x < target.x &&
+        this.x + this.w > target.x&&
         this.y > target.y &&
         this.y + this.height < target.y + target.h) {
         return CollisionDirection.RIGHT;
-      }
-
-      if (this.y < target.y + target.h &&
-        this.y < target.y + target.h &&
-        this.x > target.x &&
-        this.x + this.width < target.x + target.w) {
-        return CollisionDirection.UP;
-      }
-
-      if (this.y > target.y - target.h &&
-        this.y + this.h > target.y &&
-        this.x > target.x &&
-        this.x + this.width < target.x + target.w) {
-        return CollisionDirection.DOWN;
       }
 
       return CollisionDirection.NO_COLLISION;
@@ -97,15 +85,19 @@ export class Ball extends PhysicalEntity implements Drawable, Actor {
       case CollisionDirection.NO_COLLISION:
         break;
       case CollisionDirection.LEFT:
+        this.posX += 1;
         this.velocityX *= -1;
         break;
       case CollisionDirection.RIGHT:
+        this.posX -= 1;
         this.velocityX *= -1;
         break;
       case CollisionDirection.UP:
+        this.posY += 1;
         this.velocityY *= -1;
         break;
       case CollisionDirection.DOWN:
+        this.posY -= 1;
         this.velocityY *= -1;
         break;
     }
