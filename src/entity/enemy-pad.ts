@@ -4,7 +4,7 @@ import {Ball} from "./ball";
 export class EnemyPad extends Pad {
 
   private readonly ball: Ball;
-  private readonly iqLevel = 0.7; // below 0.5
+  private readonly iqLevel = 0.7; // below 0.5 you will play with autistic enemy...
 
   constructor(protected posX: number,
               protected posY: number,
