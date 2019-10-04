@@ -1,4 +1,4 @@
-import {Drawable} from "./entity/drawable";
+import {Drawable} from './entity/drawable';
 
 export class Renderer {
   private readonly context: CanvasRenderingContext2D;
