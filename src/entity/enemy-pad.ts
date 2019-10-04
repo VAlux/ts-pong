@@ -1,5 +1,5 @@
-import {Pad} from "./pad";
-import {Ball} from "./ball";
+import {Ball} from './ball';
+import {Pad} from './pad';
 
 export class EnemyPad extends Pad {
 
@@ -17,8 +17,7 @@ export class EnemyPad extends Pad {
     this.ball = ball;
   }
 
-
-  act(): void {
+  public act(): void {
     // Fucking unbeatable AI system.
     if (this.ball.y > this.y + this.height) {
       this.velocityY += this.iqLevel;

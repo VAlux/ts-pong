@@ -1,16 +1,16 @@
+import {Actor} from './actor';
+import {CollisionResolver} from './collision-resolver';
+import {Ball} from './entity/ball';
+import {EnemyPad} from './entity/enemy-pad';
 import {Field} from './entity/field';
+import {PlayerPad} from './entity/player-pad';
 import {InputEventListener, MoveActionEvent, ScoreActionEvent} from './game-event';
 import {Renderer} from './renderer';
-import {Actor} from "./actor";
-import {CollisionResolver} from "./collision-resolver";
-import {Ball} from "./entity/ball";
-import {TypedEventEmitter} from "./typed-event-kit";
-import {PlayerPad} from "./entity/player-pad";
-import {EnemyPad} from "./entity/enemy-pad";
+import {TypedEventEmitter} from './typed-event-kit';
 
 enum PadAlignment {
   LEFT,
-  RIGHT
+  RIGHT,
 }
 
 export class Game {
@@ -51,6 +51,24 @@ export class Game {
     this.isRunning = false;
   }
 
+  public start() {
+    this.setRunning(true);
+    window.requestAnimationFrame(() => this.tick());
+  }
+
+  public setRunning(value: boolean) {
+    this.isRunning = value;
+  }
+
+  public tick(): void {
+    if (this.isRunning) {
+      this.collisionResolver.resolveCollisions();
+      this.actors.forEach((actor) => actor.act());
+      this.renderer.render();
+      window.requestAnimationFrame(() => this.tick());
+    }
+  }
+
   private registerEventListeners() {
     this.scoreEventListener.on((scoreEvent) => {
       switch (scoreEvent) {
@@ -77,26 +95,8 @@ export class Game {
     });
   }
 
-  public start() {
-    this.setRunning(true);
-    window.requestAnimationFrame(() => this.tick());
-  }
-
-  public setRunning(value: boolean) {
-    this.isRunning = value;
-  }
-
-  public tick(): void {
-    if (this.isRunning) {
-      this.collisionResolver.resolveCollisions();
-      this.actors.forEach((actor) => actor.act());
-      this.renderer.render();
-      window.requestAnimationFrame(() => this.tick());
-    }
-  }
-
   private createPlayerPad(width: number, height: number, align: PadAlignment = PadAlignment.LEFT): PlayerPad {
-    const {padWidth, padHeight, padPositionX, padPositionY} = Game.calculatePadPosition(width, height, align);
+    const {padWidth, padHeight, padPositionX, padPositionY} = this.calculatePadPosition(width, height, align);
 
     return new PlayerPad(
       padPositionX,
@@ -106,7 +106,7 @@ export class Game {
   }
 
   private createEnemyPad(width: number, height: number, align: PadAlignment = PadAlignment.RIGHT): EnemyPad {
-    const {padWidth, padHeight, padPositionX, padPositionY} = Game.calculatePadPosition(width, height, align);
+    const {padWidth, padHeight, padPositionX, padPositionY} = this.calculatePadPosition(width, height, align);
 
     return new EnemyPad(
       padPositionX,
@@ -116,7 +116,7 @@ export class Game {
       this.ball);
   }
 
-  private static calculatePadPosition(canvasWidth: number, canvasHeight: number, align: PadAlignment) {
+  private calculatePadPosition(canvasWidth: number, canvasHeight: number, align: PadAlignment) {
     const padWidth = canvasWidth / 60;
     const padHeight = canvasHeight / 5;
 

@@ -1,11 +1,11 @@
-import {PhysicalEntity} from "./entity/physical-entity";
+import {PhysicalEntity} from './entity/physical-entity';
 
 export enum CollisionDirection {
   NO_COLLISION,
   LEFT,
   RIGHT,
   UP,
-  DOWN
+  DOWN,
 }
 
 export class CollisionResolver {
@@ -17,7 +17,7 @@ export class CollisionResolver {
       const subject = this.entities[i];
       for (let j = 0; j < this.entities.length; j++) {
         const target = this.entities[j];
-        if (i != j) {
+        if (i !== j) {
           subject.resolveCollisionWith(target, subject.checkCollisionWith(target));
         }
       }

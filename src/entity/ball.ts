@@ -1,11 +1,11 @@
-import {PhysicalEntity} from "./physical-entity";
-import {Drawable} from "./drawable";
-import {Field} from "./field";
-import {Actor} from "../actor";
-import {CollisionDirection} from "../collision-resolver";
-import {ScoreActionEvent} from "../game-event";
-import {TypedEventEmitter} from "../typed-event-kit";
-import {MathEx} from "../MathEx";
+import {Actor} from '../actor';
+import {CollisionDirection} from '../collision-resolver';
+import {ScoreActionEvent} from '../game-event';
+import {MathEx} from '../math-ex';
+import {TypedEventEmitter} from '../typed-event-kit';
+import {Drawable} from './drawable';
+import {Field} from './field';
+import {PhysicalEntity} from './physical-entity';
 
 export class Ball extends PhysicalEntity implements Drawable, Actor {
 
@@ -24,12 +24,12 @@ export class Ball extends PhysicalEntity implements Drawable, Actor {
     this.scoreEventEmitter = scoreEmitter;
   }
 
-  act(): void {
+  public act(): void {
     this.posX += this.velocityX;
     this.posY += this.velocityY;
   }
 
-  draw(context: CanvasRenderingContext2D): void {
+  public draw(context: CanvasRenderingContext2D): void {
     context.beginPath();
     context.strokeStyle = '#3c43ff';
     context.ellipse(this.posX, this.posY, this.width, this.height, 0, 0, 2 * Math.PI);
@@ -37,7 +37,7 @@ export class Ball extends PhysicalEntity implements Drawable, Actor {
     context.closePath();
   }
 
-  checkCollisionWith(target: PhysicalEntity): CollisionDirection {
+  public checkCollisionWith(target: PhysicalEntity): CollisionDirection {
     if (target instanceof Field) {
       if (this.x - this.width < target.x) {
         this.scoreEventEmitter.emit(ScoreActionEvent.RIGHT_PLAYER_SCORED);
@@ -79,7 +79,7 @@ export class Ball extends PhysicalEntity implements Drawable, Actor {
   }
 
   // @ts-ignore
-  resolveCollisionWith(target: PhysicalEntity, direction: CollisionDirection): void {
+  public resolveCollisionWith(target: PhysicalEntity, direction: CollisionDirection): void {
     // we do not care about the target in this case
     switch (direction) {
       case CollisionDirection.NO_COLLISION:

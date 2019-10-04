@@ -1,18 +1,18 @@
-import {TypedEventEmitter} from "./typed-event-kit";
+import {TypedEventEmitter} from './typed-event-kit';
 
 enum Keys {
   Up = 83,
-  Down = 87
+  Down = 87,
 }
 
 export enum MoveActionEvent {
   MOVE_UP,
-  MOVE_DOWN
+  MOVE_DOWN,
 }
 
 export enum ScoreActionEvent {
   LEFT_PLAYER_SCORED,
-  RIGHT_PLAYER_SCORED
+  RIGHT_PLAYER_SCORED,
 }
 
 export class InputEventListener {

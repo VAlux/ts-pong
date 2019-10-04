@@ -1,6 +1,6 @@
+import {CollisionDirection} from '../collision-resolver';
 import {Drawable} from './drawable';
 import {PhysicalEntity} from './physical-entity';
-import {CollisionDirection} from "../collision-resolver";
 
 export class Field extends PhysicalEntity implements Drawable {
   public draw(context: CanvasRenderingContext2D): void {
@@ -12,12 +12,12 @@ export class Field extends PhysicalEntity implements Drawable {
   }
 
   // @ts-ignore
-  resolveCollisionWith(target: PhysicalEntity, direction: CollisionDirection): void {
+  public resolveCollisionWith(target: PhysicalEntity, direction: CollisionDirection): void {
     // nothing to do here
   }
 
   // @ts-ignore
-  checkCollisionWith(target: PhysicalEntity): CollisionDirection {
+  public checkCollisionWith(target: PhysicalEntity): CollisionDirection {
     return CollisionDirection.NO_COLLISION; // field do not collide with anything by itself
   }
 }

@@ -1,4 +1,4 @@
-import {CollisionDirection} from "../collision-resolver";
+import {CollisionDirection} from '../collision-resolver';
 
 export abstract class PhysicalEntity {
 
@@ -9,7 +9,7 @@ export abstract class PhysicalEntity {
     protected posX: number,
     protected posY: number,
     protected width: number,
-    protected height: number
+    protected height: number,
   ) {
   }
 

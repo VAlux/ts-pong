@@ -1,9 +1,9 @@
+import {Actor} from '../actor';
+import {CollisionDirection} from '../collision-resolver';
+import {MathEx} from '../math-ex';
 import {Drawable} from './drawable';
-import {PhysicalEntity} from './physical-entity'
-import {Actor} from "../actor";
-import {MathEx} from "../MathEx";
-import {Field} from "./field";
-import {CollisionDirection} from "../collision-resolver";
+import {Field} from './field';
+import {PhysicalEntity} from './physical-entity';
 
 export class Pad extends PhysicalEntity implements Drawable, Actor {
 
@@ -17,30 +17,29 @@ export class Pad extends PhysicalEntity implements Drawable, Actor {
     context.closePath();
   }
 
-  act(): void {
+  public act(): void {
     this.posX += this.velocityX;
     this.posY += this.velocityY;
 
     if (Math.abs(MathEx.round(this.velocityX, this.dampeningThreshold)) !== this.dampeningThreshold) {
-      this.velocityX = MathEx.lerp(this.velocityX, 0, this.dampeningFactor)
+      this.velocityX = MathEx.lerp(this.velocityX, 0, this.dampeningFactor);
     }
 
     if (Math.abs(MathEx.round(this.velocityY, this.dampeningThreshold)) !== this.dampeningThreshold) {
-      this.velocityY = MathEx.lerp(this.velocityY, 0, this.dampeningFactor)
+      this.velocityY = MathEx.lerp(this.velocityY, 0, this.dampeningFactor);
     }
   }
 
-  resolveCollisionWith(target: PhysicalEntity, direction: CollisionDirection): void {
+  public resolveCollisionWith(target: PhysicalEntity, direction: CollisionDirection): void {
     if (target instanceof Field) {
-      // TODO: maybe add field bouncing suppressor factor??
       if (direction === CollisionDirection.UP || direction === CollisionDirection.DOWN) {
-        this.velocityY *= -1;
-        this.posY += Math.sign(this.velocityY);
+        this.posY += Math.sign(this.velocityY) * 2;
+        this.velocityY *= -0.5;
       }
     }
   }
 
-  checkCollisionWith(target: PhysicalEntity): CollisionDirection {
+  public checkCollisionWith(target: PhysicalEntity): CollisionDirection {
     if (target instanceof Field) {
       if (this.y < target.y) {
         return CollisionDirection.UP;
