@@ -8,6 +8,7 @@ export class PlayerPad extends Pad implements Movable {
               protected width: number,
               protected height: number,
               private playerPadSpeed: number) {
+                
     super(posX, posY, width, height);
   }
 

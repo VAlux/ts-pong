@@ -6,6 +6,7 @@ import {TypedEventEmitter} from '../typed-event-kit';
 import {Drawable} from './drawable';
 import {Field} from './field';
 import {PhysicalEntity} from './physical-entity';
+import { Pad } from './pad';
 
 export class Ball extends PhysicalEntity implements Drawable, Actor {
 
@@ -56,11 +57,9 @@ export class Ball extends PhysicalEntity implements Drawable, Actor {
       if (this.y + this.height > target.y + target.h) {
         return CollisionDirection.DOWN;
       }
-
-      return CollisionDirection.NO_COLLISION;
-    } else {
+    } else if (target instanceof Pad) {
        // we do not care about the up and down collisions in this case
-      if (this.y > target.y && this.y + this.height < target.y + target.h) {
+      if (this.y > target.y && this.y < target.y + target.h) {
         if (this.x > target.x + target.w && this.x - this.w < target.x + target.w) {
           return CollisionDirection.LEFT;
         }
@@ -69,9 +68,9 @@ export class Ball extends PhysicalEntity implements Drawable, Actor {
           return CollisionDirection.RIGHT;
         }
       }
-
-      return CollisionDirection.NO_COLLISION;
     }
+
+    return CollisionDirection.NO_COLLISION;
   }
 
   // @ts-ignore

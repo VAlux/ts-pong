@@ -17,7 +17,7 @@ export class Game {
   private actors: Actor[];
   private isRunning: boolean;
   private readonly canvas: HTMLCanvasElement;
-  private readonly playerPad: PlayerPad = new PlayerPad(0, 0, 0, 0);
+  private readonly playerPad: PlayerPad = new PlayerPad(0, 0, 0, 0, 5);
   private readonly enemyPad: EnemyPad;
   private readonly field: Field;
   private readonly ball: Ball;
@@ -102,7 +102,8 @@ export class Game {
       padPositionX,
       padPositionY,
       padWidth,
-      padHeight);
+      padHeight, 
+      5);
   }
 
   private createEnemyPad(width: number, height: number, align: PadAlignment = PadAlignment.RIGHT): EnemyPad {
