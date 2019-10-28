@@ -32,8 +32,11 @@ export class Pad extends PhysicalEntity implements Drawable, Actor {
 
   public resolveCollisionWith(target: PhysicalEntity, direction: CollisionDirection): void {
     if (target instanceof Field) {
-      if (direction === CollisionDirection.UP || direction === CollisionDirection.DOWN) {
-        this.posY += Math.sign(this.velocityY) * 2;
+      if (direction === CollisionDirection.UP) {
+        this.posY += 2;
+        this.velocityY *= -0.5;
+      } else if (direction === CollisionDirection.DOWN) {
+        this.posY -= 2;
         this.velocityY *= -0.5;
       }
     }

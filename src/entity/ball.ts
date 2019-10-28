@@ -59,19 +59,15 @@ export class Ball extends PhysicalEntity implements Drawable, Actor {
 
       return CollisionDirection.NO_COLLISION;
     } else {
-      // we do not care about the up and down collisions in this case
-      if (this.x > target.x + target.w &&
-        this.x - this.w < target.x + target.w &&
-        this.y > target.y &&
-        this.y + this.height < target.y + target.h) {
-        return CollisionDirection.LEFT;
-      }
+       // we do not care about the up and down collisions in this case
+      if (this.y > target.y && this.y + this.height < target.y + target.h) {
+        if (this.x > target.x + target.w && this.x - this.w < target.x + target.w) {
+          return CollisionDirection.LEFT;
+        }
 
-      if (this.x < target.x &&
-        this.x + this.w > target.x&&
-        this.y > target.y &&
-        this.y + this.height < target.y + target.h) {
-        return CollisionDirection.RIGHT;
+        if (this.x < target.x && this.x + this.w > target.x) {
+          return CollisionDirection.RIGHT;
+        }
       }
 
       return CollisionDirection.NO_COLLISION;

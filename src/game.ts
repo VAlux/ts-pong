@@ -17,7 +17,7 @@ export class Game {
   private actors: Actor[];
   private isRunning: boolean;
   private readonly canvas: HTMLCanvasElement;
-  private readonly playerPad: PlayerPad = new PlayerPad(0,0,0,0);
+  private readonly playerPad: PlayerPad = new PlayerPad(0, 0, 0, 0);
   private readonly enemyPad: EnemyPad;
   private readonly field: Field;
   private readonly ball: Ball;
@@ -35,7 +35,7 @@ export class Game {
 
     this.scoreEventListener = new TypedEventEmitter<ScoreActionEvent>();
 
-    this.ball = new Ball(width / 2, height / 2, aspectRatio * 10, aspectRatio * 10, this.scoreEventListener);
+    this.ball = new Ball(width / 2, height / 2, aspectRatio * 5, aspectRatio * 5, this.scoreEventListener);
     this.playerPad = this.createPlayerPad(width, height);
     this.enemyPad = this.createEnemyPad(width, height);
     this.field =  new Field(0, 0, width, height);
